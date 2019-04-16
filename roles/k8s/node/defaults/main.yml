@@ -1,0 +1,7 @@
+
+k8s_node_admin_user:  "ubuntu"
+k8s_node_admin_group: "ubuntu"
+
+k8s_node_node_name: "k8s-m"
+k8s_cluster_name:   "k8s-cluster"
+

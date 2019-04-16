@@ -12,10 +12,10 @@
 #    - cp -i /etc/kubernetes/admin.conf /home/{{ k8s_master_admin_user }}/.kube/config
 #    - chown {{ k8s_master_admin_user }}:{{ k8s_master_admin_group }} /home/{{ k8s_master_admin_user }}/.kube/config
 
-#- name: Create .kube dir for {{ k8s_master_admin_user }} user
-#  file:
-#      path: "/home/{{ k8s_master_admin_user }}/.kube"
-#      state: directory
+- name: Create .kube dir for {{ k8s_master_admin_user }} user
+  file:
+      path: "/home/{{ k8s_master_admin_user }}/.kube"
+      state: directory
 
 - name: Copy kube config to {{ k8s_master_admin_user }} home .kube dir 
   copy:
@@ -47,4 +47,4 @@
 
 - name: Copy join command for {{ k8s_cluster_name }} cluster to local file
   become: false
-  local_action: copy content="{{ join_command.stdout_lines[0] }}" dest="./{{ k8s_cluster_name }}join-command"
+  local_action: copy content="{{ join_command.stdout_lines[0] }}" dest="./{{ k8s_cluster_name }}-join-command"

@@ -1,1 +1,0 @@
-kubeadm join 192.168.50.11:6443 --token nj5l1f.gltwqwq19i9jeipr     --discovery-token-ca-cert-hash sha256:fabde526a59702e7cf9f84714e6f19cbf8aa399efc31b2343b714a129e9709c2 

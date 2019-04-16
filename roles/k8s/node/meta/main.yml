@@ -1,0 +1,6 @@
+dependencies:
+  - { role: k8s/common,
+      k8s_common_admin_user: "{{k8s_node_admin_user}}",
+      k8s_common_admin_group: "{{k8s_node_admin_group}}"
+    }
+  

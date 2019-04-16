@@ -1,0 +1,7 @@
+dependencies:
+  - { role: add_packages,
+    linux_add_packages_repositories: "{{ k8s_common_add_packages_repositories }}",
+    linux_add_packages_keys: "{{ k8s_common_add_packages_keys }}",
+    linux_add_packages_names: "{{ k8s_common_add_packages_names }}",
+    linux_remove_packages_names: "{{ k8s_common_remove_packages_names }}"
+    }

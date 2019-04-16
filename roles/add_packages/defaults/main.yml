@@ -1,0 +1,15 @@
+---
+
+linux_add_packages_cache_valid_time: 60
+
+#linux_add_packages_repositories:
+#- repo:
+
+#linux_add_packages_keys:
+#- key:
+
+#linux_add_packages_names:
+#- name:
+
+#linux_remove_packages_names:
+#- name:

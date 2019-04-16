@@ -1,0 +1,27 @@
+
+
+k8s_common_add_packages_keys:
+- key: https://download.docker.com/linux/ubuntu/gpg
+- key: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+
+k8s_common_add_packages_repositories:
+- repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ansible_distribution_release}} stable"
+- repo: "deb https://apt.kubernetes.io/ kubernetes-xenial main" #k8s not available for Bionic (Ubuntu 18.04)
+
+k8s_common_add_packages_names:
+- name: apt-transport-https
+- name: curl
+- name: docker-ce
+- name: docker-ce-cli 
+- name: containerd.io
+- name: kubeadm 
+- name: kubelet 
+- name: kubectl
+
+k8s_common_remove_packages_names:
+- name: 
+
+k8s_common_admin_user:  "ubuntu"
+k8s_common_admin_group: "ubuntu"
+
+

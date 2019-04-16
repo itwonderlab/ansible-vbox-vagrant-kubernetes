@@ -1,0 +1,5 @@
+  - hosts: k8s_master
+    become: yes
+    roles:
+      - { role: k8s/master}   
+

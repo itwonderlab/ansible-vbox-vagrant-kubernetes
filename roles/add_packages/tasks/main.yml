@@ -1,0 +1,34 @@
+---
+- name: Add new repositories keys
+  apt_key:
+    url='{{item.key}}'
+  with_items: "{{ linux_add_packages_keys | default([])}}"
+  when: linux_add_packages_keys is defined and not (linux_add_packages_keys is none or linux_add_packages_keys | trim == '')
+  register: aptnewkeys
+
+- name: Add new repositories to sources
+  apt_repository:
+    repo='{{item.repo}}'
+  with_items: "{{ linux_add_packages_repositories | default([])}}"
+  when: linux_add_packages_repositories is defined and not (linux_add_packages_repositories is none or linux_add_packages_repositories | trim == '')
+
+- name: Force update cache if new keys added
+  set_fact:
+        linux_add_packages_cache_valid_time: 0
+  when: aptnewkeys.changed
+
+- name: Remove packages
+  apt:
+    name={{ item.name }}
+    state=absent
+  with_items: "{{ linux_remove_packages_names | default([])}}"
+  when: linux_remove_packages_names is defined and not (linux_remove_packages_names is none or linux_remove_packages_names | trim == '')
+
+- name: Install packages
+  apt:
+    name={{ item.name }}
+    state=present
+    update_cache=yes
+    cache_valid_time={{linux_add_packages_cache_valid_time}}
+  with_items: "{{ linux_add_packages_names | default([])}}"
+  when: linux_add_packages_names is defined and not (linux_add_packages_names is none or linux_add_packages_names | trim == '')

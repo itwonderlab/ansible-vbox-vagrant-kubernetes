@@ -1,0 +1,50 @@
+#https://docs.projectcalico.org/v3.6/getting-started/kubernetes/
+
+- name: Configure kubectl
+  command: kubeadm init --apiserver-advertise-address="{{ k8s_master_apiserver_advertise_address }}" --apiserver-cert-extra-sans="{{ k8s_master_apiserver_advertise_address }}" --node-name="{{ k8s_master_node_name }}" --pod-network-cidr="{{ k8s_master_pod_network_cidr }}"
+  args: 
+    creates: /etc/kubernetes/manifests/kube-apiserver.yaml
+
+#- name: Setup kubeconfig for k8s_master_admin_user user
+#  command: "{{ item }}"
+#  with_items:
+#    - mkdir -p /home/{{ k8s_master_admin_user }}/.kube
+#    - cp -i /etc/kubernetes/admin.conf /home/{{ k8s_master_admin_user }}/.kube/config
+#    - chown {{ k8s_master_admin_user }}:{{ k8s_master_admin_group }} /home/{{ k8s_master_admin_user }}/.kube/config
+
+#- name: Create .kube dir for {{ k8s_master_admin_user }} user
+#  file:
+#      path: "/home/{{ k8s_master_admin_user }}/.kube"
+#      state: directory
+
+- name: Copy kube config to {{ k8s_master_admin_user }} home .kube dir 
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest:  /home/{{ k8s_master_admin_user }}/.kube/config
+    remote_src: yes
+    owner: "{{ k8s_master_admin_user }}"
+    group: "{{ k8s_master_admin_group }}"
+    mode: 0660
+
+
+#https://docs.projectcalico.org/v3.6/getting-started/kubernetes/installation/calico
+
+#Rewrite calico replacing defaults
+#https://docs.projectcalico.org/v3.6/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml
+- name: Rewrite calico.yaml
+  template:
+     src: calico-networking/1.7/calico.yaml
+     dest: /home/{{ k8s_master_admin_user }}/calico.yaml 
+    
+- name: Install Calico (using Kubernetes API datastore)
+  become: false
+  command: kubectl apply -f /home/{{ k8s_master_admin_user }}/calico.yaml 
+  
+# Step 2.6 from https://kubernetes.io/blog/2019/03/15/kubernetes-setup-using-ansible-and-vagrant/
+- name: Generate join command
+  command: kubeadm token create --print-join-command
+  register: join_command
+
+- name: Copy join command for {{ k8s_cluster_name }} cluster to local file
+  become: false
+  local_action: copy content="{{ join_command.stdout_lines[0] }}" dest="./{{ k8s_cluster_name }}join-command"

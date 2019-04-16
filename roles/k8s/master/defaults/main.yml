@@ -1,0 +1,9 @@
+
+k8s_master_admin_user:  "ubuntu"
+k8s_master_admin_group: "ubuntu"
+
+k8s_master_node_name: "k8s-m"
+k8s_master_apiserver_advertise_address: "192.168.101.100"
+k8s_master_pod_network_cidr: "192.168.0.0/16"
+
+

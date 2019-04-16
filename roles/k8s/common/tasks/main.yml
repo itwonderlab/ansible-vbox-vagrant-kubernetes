@@ -1,0 +1,19 @@
+
+- name: Remove swapfile from /etc/fstab
+  mount:
+    name: swap
+    fstype: swap
+    state: absent
+- name: Disable swap
+  command: swapoff -a
+  when: ansible_swaptotal_mb > 0
+
+- name: Add k8s_common_admin_user user to docker group
+  user: 
+    name: "{{ k8s_common_admin_user }}"
+    group: docker
+
+- name: Check that docker service is started
+  service: 
+        name: docker 
+        state: started

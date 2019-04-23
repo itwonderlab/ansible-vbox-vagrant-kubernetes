@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: my-echo
+          image: gcr.io/google_containers/echoserver:1.8          
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service-np
+  labels:
+    name: nginx-service-np
+spec:
+  type: NodePort
+  ports:
+    - port: 8082        # Cluster IP http://10.109.199.234:8082
+      targetPort: 8080  # Application port
+      nodePort: 30000   # (EXTERNAL-IP VirtualBox IPs) http://192.168.50.11:30000/ http://192.168.50.12:30000/ http://192.168.50.13:30000/
+      protocol: TCP
+      name: http
+  selector:
+    app: nginx
+
+  #NAME                       TYPE           CLUSTER-IP       EXTERNAL-IP     PORT(S)          AGE
+  #...
+  #service/nginx-service-np   NodePort       10.109.199.234   <none>          8082:30000/TCP   18m
+

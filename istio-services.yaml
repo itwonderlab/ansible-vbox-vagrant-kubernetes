@@ -1,0 +1,93 @@
+
+#Grafana
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: grafana
+    chart: grafana
+    heritage: Tiller
+    release: istio
+  name: grafana-np
+  namespace: istio-system
+spec:
+  ports:
+  - name: http
+    nodePort: 32493
+    port: 3000
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app: grafana
+  sessionAffinity: None
+  type: NodePort
+---
+#prometheus
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: prometheus
+    chart: prometheus
+    heritage: Tiller
+    release: istio
+  name: prometheus-np
+  namespace: istio-system
+spec:
+  ports:
+  - name: http
+    nodePort: 32494
+    port: 9090
+    protocol: TCP
+    targetPort: 9090
+  selector:
+    app: prometheus
+  sessionAffinity: None
+  type: NodePort
+---
+#jaeger
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: jaeger
+    chart: tracing
+    heritage: Tiller
+    release: istio
+  name: tracing-np
+  namespace: istio-system
+spec:
+  ports:
+  - name: http-tracing
+    nodePort: 32495
+    port: 80
+    protocol: TCP
+    targetPort: 16686
+  selector:
+    app: jaeger
+  sessionAffinity: None
+  type: NodePort
+---
+#kiali
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: kiali
+    chart: kiali
+    heritage: Tiller
+    release: istio
+  name: kiali-np
+  namespace: istio-system
+spec:
+  ports:
+  - name: http-kiali
+    nodePort: 32496
+    port: 20001
+    protocol: TCP
+    targetPort: 20001
+  selector:
+    app: kiali
+  sessionAffinity: None
+  type: NodePort
+

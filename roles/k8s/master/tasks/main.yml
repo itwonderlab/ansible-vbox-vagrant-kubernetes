@@ -19,13 +19,11 @@
     group: "{{ k8s_master_admin_group }}"
     mode: 0660
 
-#https://docs.projectcalico.org/v3.6/getting-started/kubernetes/installation/calico
-
 #Rewrite calico replacing defaults
-#https://docs.projectcalico.org/v3.6/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml
+#https://docs.projectcalico.org/v3.9/getting-started/kubernetes/installation/calico
 - name: Rewrite calico.yaml
   template:
-     src: calico-networking/1.7/calico.yaml
+     src: calico/3.9/calico.yaml
      dest: /home/{{ k8s_master_admin_user }}/calico.yaml 
     
 - name: Install Calico (using Kubernetes API datastore)

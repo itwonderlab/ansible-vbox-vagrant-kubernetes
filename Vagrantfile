@@ -1,10 +1,12 @@
-IMAGE_NAME = "bento/ubuntu-18.04"
+IMAGE_NAME = "bento/ubuntu-20.04"
 K8S_NAME = "ditwl-k8s-01"
 MASTERS_NUM = 1
 MEM = 2048
 CPU = 2
 NODES_NUM = 2
 IP_BASE = "192.168.50."
+
+VAGRANT_DISABLE_VBOXSYMLINKCREATE=1
 
 Vagrant.configure("2") do |config|
     config.ssh.insert_key = false
@@ -21,11 +23,6 @@ Vagrant.configure("2") do |config|
             master.vm.hostname = "k8s-m-#{i}"
             master.vm.provision "ansible" do |ansible|
                 ansible.playbook = "roles/k8s.yml"
-                #Generate Ansible Groups for inventory
-                ansible.groups = {
-                    "k8s-master" => ["k8s-m-[1:#{MASTERS_NUM}]"],
-                    "k8s-node" => ["k8s-n-[1:#{NODES_NUM}]"]
-                }
                 #Redefine defaults
                 ansible.extra_vars = {
                     k8s_cluster_name:       K8S_NAME,                    
@@ -45,12 +42,7 @@ Vagrant.configure("2") do |config|
             node.vm.network "private_network", ip: "#{IP_BASE}#{j + 10 + MASTERS_NUM}"
             node.vm.hostname = "k8s-n-#{j}"
             node.vm.provision "ansible" do |ansible|
-                ansible.playbook = "roles/k8s.yml"
-                #Generate Ansible Groups for inventory              
-                ansible.groups = {
-                    "k8s-master" => ["k8s-m-[1:#{MASTERS_NUM}]"],
-                    "k8s-node" => ["k8s-n-[1:#{NODES_NUM}]"]
-                }                    
+                ansible.playbook = "roles/k8s.yml"                   
                 #Redefine defaults
                 ansible.extra_vars = {
                     k8s_cluster_name:     K8S_NAME,
@@ -61,4 +53,4 @@ Vagrant.configure("2") do |config|
             end
         end
     end
-end    
+end

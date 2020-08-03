@@ -26,5 +26,4 @@
     regexp: 'KUBELET_EXTRA_ARGS='
     insertafter: '\[Service\]'
     state: present
-  notify:
-    - restart kubelet
+  notify: restart kubelet

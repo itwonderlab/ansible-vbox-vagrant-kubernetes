@@ -11,8 +11,8 @@ k8s_common_add_packages_repositories:
 k8s_common_add_packages_names:
 - name: apt-transport-https
 - name: curl
-- name: docker-ce=5:19.03.14~3-0~ubuntu-focal
-- name: docker-ce-cli=5:19.03.14~3-0~ubuntu-focal
+- name: docker-ce
+- name: docker-ce-cli 
 - name: containerd.io
 - name: kubeadm 
 - name: kubelet 

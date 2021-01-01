@@ -4,8 +4,8 @@ MASTERS_NUM = 1
 MASTERS_CPU = 2 
 MASTERS_MEM = 2048
 
-NODES_NUM = 3
-NODES_CPU = 4
+NODES_NUM = 1
+NODES_CPU = 2
 NODES_MEM = 2048
 
 IP_BASE = "192.168.50."
@@ -47,6 +47,7 @@ Vagrant.configure("2") do |config|
             node.vm.provider "virtualbox" do |v|
                 v.memory = NODES_MEM
                 v.cpus = NODES_CPU
+                #v.customize ["modifyvm", :id, "--cpuexecutioncap", "20"]
             end             
             node.vm.provision "ansible" do |ansible|
                 ansible.playbook = "roles/k8s.yml"                   

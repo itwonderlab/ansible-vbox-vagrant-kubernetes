@@ -1,0 +1,37 @@
+# Common PAM LIMITS configuration
+---
+pam_domain: "*"
+
+pam_limits:
+  - comment:  "Open file descriptors: soft"
+    type:     soft
+    limit:    nofile
+    value:    4096
+  - comment:  "Open file descriptors: hard"
+    type:     hard
+    limit:    nofile
+    value:    65536
+  - comment:  "Number of processes available to a single user: soft"
+    type:     soft
+    limit:    nproc
+    value:    2047
+  - comment:  "Number of processes available to a single user: hard"
+    type:     hard
+    limit:    nproc
+    value:    16384
+  - comment:  "Size of the stack segment of the process: soft"
+    type:     soft
+    limit:    stack
+    value:    10240
+  - comment:  "Size of the stack segment of the process: hard"
+    type:     hard
+    limit:    stack
+    value:    32768
+  - comment:  "Maximum locked memory limit mem lock 90% of RAM: soft"
+    type:     soft
+    limit:    memlock
+    value:    1887437
+  - comment:  "Maximum locked memory limit mem lock 90% of RAM: hard"
+    type:     hard
+    limit:    memlock
+    value:    1887437

@@ -1,0 +1,6 @@
+---
+# file: roles/linux/pam_limits/tasks/main.yml
+
+- name: Set user limits
+  pam_limits: domain={{ pam_domain }} limit_type={{ item.type }} limit_item={{ item.limit }} value={{ item.value }}
+  with_items: '{{pam_limits}}'

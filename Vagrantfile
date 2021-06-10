@@ -10,7 +10,7 @@ NODES_MEM = 2048
 
 IP_BASE = "192.168.50."
 
-VAGRANT_DISABLE_VBOXSYMLINKCREATE=1
+VAGRANT_DISABLE_VBOXSYMLINKCREATE=0
 
 Vagrant.configure("2") do |config|
     config.ssh.insert_key = false

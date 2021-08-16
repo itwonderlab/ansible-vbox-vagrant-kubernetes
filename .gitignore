@@ -1,3 +1,4 @@
 .vagrant/
 .private/
 *-join-command
+*.log

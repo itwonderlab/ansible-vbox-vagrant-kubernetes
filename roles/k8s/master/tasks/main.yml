@@ -1,7 +1,17 @@
-#https://docs.projectcalico.org/v3.6/getting-started/kubernetes/
+#https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/configure-cgroup-driver/
+#https://kubernetes.io/docs/reference/config-api/kubeadm-config.v1beta3/
+- name: Configuring the kubelet cgroup driver
+  template:
+     src: kubeadm-config.yaml
+     dest: /home/{{ k8s_master_admin_user }}/kubeadm-config.yaml 
 
+#https://docs.projectcalico.org/v3.6/getting-started/kubernetes/
+#kubeadm init --config /home/vagrant/kubeadm-config.yaml
+# --cri-socket /run/containerd/containerd.sock
+#--apiserver-advertise-address=192.168.50.11 --apiserver-cert-extra-sans=192.168.50.11 --node-name=k8s-m-1 --pod-network-cidr=192.168.112.0/20 
 - name: Configure kubectl
-  command: kubeadm init --apiserver-advertise-address="{{ k8s_master_apiserver_advertise_address }}" --apiserver-cert-extra-sans="{{ k8s_master_apiserver_advertise_address }}" --node-name="{{ k8s_master_node_name }}" --pod-network-cidr="{{ k8s_master_pod_network_cidr }}"
+  command: kubeadm init --config /home/{{ k8s_master_admin_user }}/kubeadm-config.yaml
+  # --apiserver-advertise-address="{{ k8s_master_apiserver_advertise_address }}" --apiserver-cert-extra-sans="{{ k8s_master_apiserver_advertise_address }}" --node-name="{{ k8s_master_node_name }}" --pod-network-cidr="{{ k8s_master_pod_network_cidr }}"
   args: 
     creates: /etc/kubernetes/manifests/kube-apiserver.yaml
 

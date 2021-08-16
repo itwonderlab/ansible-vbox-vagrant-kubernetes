@@ -9,15 +9,32 @@
   command: swapoff -a
   when: ansible_swaptotal_mb > 0
 
-- name: Add k8s_common_admin_user user to docker group
-  user: 
-    name: "{{ k8s_common_admin_user }}"
-    group: docker
+- name: Configure containerd.conf modules
+  template:
+     src: etc/modules-load.d/containerd.conf
+     dest: /etc/modules-load.d/containerd.conf 
 
-- name: Check that docker service is started
-  service: 
-        name: docker 
-        state: started
+- name: Load containerd kernel modules
+  modprobe:
+    name: "{{ item.name }}"
+    state: present
+  loop: "{{ k8s_common_modprobe }}"
+
+- name: Configure kubernetes-cri sys params
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: present
+    reload: yes
+  loop: "{{ k8s_common_sysctl }}"
+
+# https://github.com/containerd/containerd/issues/4581
+# File etc/containerd/config.toml needs to be deleted before kubeadm init
+- name: Configure containerd.conf
+  template:
+    src: etc/containerd/config.toml
+    dest: /etc/containerd/config.toml
+  notify: restart containerd
 
 - name: Configure node-ip {{ k8s_node_public_ip }} at kubelet
   lineinfile:
@@ -27,3 +44,18 @@
     insertafter: '\[Service\]'
     state: present
   notify: restart kubelet
+  # --cgroup-driver=systemd --container-runtime=remote --container-runtime-endpoint=/run/containerd/containerd.sock
+
+- name: restart containerd
+  service: 
+    name: containerd 
+    state: restarted 
+    daemon_reload: yes
+
+- name: Delete configuration for containerd.conf (see https://github.com/containerd/containerd/issues/4581)
+  file:
+    state: absent
+    path:  /etc/containerd/config.toml
+
+- name: Restart services if needed
+  meta: flush_handlers

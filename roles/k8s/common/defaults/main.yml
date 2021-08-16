@@ -11,15 +11,29 @@ k8s_common_add_packages_repositories:
 k8s_common_add_packages_names:
 - name: apt-transport-https
 - name: curl
-- name: docker-ce
-- name: docker-ce-cli 
 - name: containerd.io
 - name: kubeadm 
 - name: kubelet 
 - name: kubectl
 
+#- name: docker-ce
+#- name: docker-ce-cli 
+
 k8s_common_remove_packages_names:
 - name: 
+
+k8s_common_modprobe:
+  - name: overlay
+  - name: br_netfilter
+
+k8s_common_sysctl:
+  - name: net.bridge.bridge-nf-call-iptables
+    value: 1
+  - name: net.ipv4.ip_forward
+    value: 1
+  - name: net.bridge.bridge-nf-call-ip6tables
+    value: 1
+
 
 k8s_common_admin_user:  "ubuntu"
 k8s_common_admin_group: "ubuntu"

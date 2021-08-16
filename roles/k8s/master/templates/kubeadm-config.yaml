@@ -1,0 +1,33 @@
+# kubeadm-config.yaml
+kind: KubeletConfiguration
+apiVersion: kubelet.config.k8s.io/v1beta1
+cgroupDriver: systemd
+containerRuntime: remote
+---
+apiVersion: kubeadm.k8s.io/v1beta3
+kind: InitConfiguration
+bootstrapTokens:
+- groups:
+  - system:bootstrappers:kubeadm:default-node-token
+  token: abcdef.0123456789abcdef
+  ttl: 24h0m0s
+  usages:
+  - signing
+  - authentication
+localAPIEndpoint:
+  advertiseAddress: "{{ k8s_master_apiserver_advertise_address }}"
+  bindPort: 6443
+---
+apiVersion: kubeadm.k8s.io/v1beta3
+kind: ClusterConfiguration
+apiServer:
+  timeoutForControlPlane: 4m0s
+  certSANs:
+    - "10.100.1.1"
+    - "{{ k8s_master_apiserver_advertise_address }}"  
+clusterName: "{{  k8s_cluster_name }}"
+etcd:
+  local:
+    dataDir: /var/lib/etcd
+networking:
+  podSubnet: "{{ k8s_master_pod_network_cidr }}"

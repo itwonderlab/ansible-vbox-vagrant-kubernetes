@@ -1,5 +1,3 @@
-
-
 k8s_common_add_packages_keys:
 - key: https://download.docker.com/linux/ubuntu/gpg
 - key: https://packages.cloud.google.com/apt/doc/apt-key.gpg
@@ -16,9 +14,6 @@ k8s_common_add_packages_names:
 - name: kubelet 
 - name: kubectl
 
-#- name: docker-ce
-#- name: docker-ce-cli 
-
 k8s_common_remove_packages_names:
 - name: 
 
@@ -33,7 +28,6 @@ k8s_common_sysctl:
     value: 1
   - name: net.bridge.bridge-nf-call-ip6tables
     value: 1
-
 
 k8s_common_admin_user:  "ubuntu"
 k8s_common_admin_group: "ubuntu"

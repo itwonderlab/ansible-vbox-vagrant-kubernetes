@@ -44,7 +44,6 @@
     insertafter: '\[Service\]'
     state: present
   notify: restart kubelet
-  # --cgroup-driver=systemd --container-runtime=remote --container-runtime-endpoint=/run/containerd/containerd.sock
 
 - name: restart containerd
   service: 
@@ -52,7 +51,7 @@
     state: restarted 
     daemon_reload: yes
 
-- name: Delete configuration for containerd.conf (see https://github.com/containerd/containerd/issues/4581)
+- name: Delete configuration for containerd.conf as kubeadm is unable to detect containerd (see https://github.com/containerd/containerd/issues/4581)
   file:
     state: absent
     path:  /etc/containerd/config.toml

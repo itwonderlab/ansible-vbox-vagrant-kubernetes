@@ -12,8 +12,28 @@ IP_BASE = "192.168.50."
 
 VAGRANT_DISABLE_VBOXSYMLINKCREATE=1
 
+# IMPORTANT for Windows WSL2 users: inject your own ssh key from your /home/ directory into the VMs. 
+# The file must exist WITHIN the file system of your WSL2 distro, and NOT be mounted into the WSL2 distro from windows!
+# Otherwise ansible will error with "insecure private key"
+# Make sure that the corresponding "*.pub" file is located in the same directory (which it usually is)
+# Uncomment the next line:
+#SECURE_SSH_PRIVATE_KEY = "~/.ssh/NewKey"
+
 Vagrant.configure("2") do |config|
     config.ssh.insert_key = false
+
+    # Insert own ssh key to the machines. 
+    # Taken from: https://stackoverflow.com/questions/30075461/how-do-i-add-my-own-public-key-to-vagrant-vm
+    # uncomment the next block
+    # vagrant_home_path = ENV["VAGRANT_HOME"] ||= "~/.vagrant.d"
+    # config.ssh.private_key_path = ["#{vagrant_home_path}/insecure_private_key", "#{SECURE_SSH_PRIVATE_KEY}"]
+
+    # config.vm.provision "file", source: "#{SECURE_SSH_PRIVATE_KEY}.pub", destination: "/home/vagrant/.ssh/SecureKey.pub"
+    # config.vm.provision :shell, privileged: false do |shell_action|
+    #     shell_action.inline = <<-SHELL
+    #         cat /home/vagrant/.ssh/SecureKey.pub >> /home/vagrant/.ssh/authorized_keys
+    #     SHELL
+    #   end
 
     (1..MASTERS_NUM).each do |i|      
         config.vm.define "k8s-m-#{i}" do |master|

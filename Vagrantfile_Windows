@@ -16,7 +16,7 @@ VAGRANT_DISABLE_VBOXSYMLINKCREATE=1
 # The file must exist WITHIN the file system of your WSL2 distro, and NOT be mounted into the WSL2 distro from windows!
 # Otherwise ansible will error with "insecure private key"
 # Make sure that the corresponding "*.pub" file is located in the same directory (which it usually is)
-SECURE_SSH_PRIVATE_KEY = "~/.ssh/devOps"
+SECURE_SSH_PRIVATE_KEY = "~/.ssh/NewKey"
 
 Vagrant.configure("2") do |config|
     config.ssh.insert_key = false

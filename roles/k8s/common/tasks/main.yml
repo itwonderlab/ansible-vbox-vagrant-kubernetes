@@ -9,6 +9,15 @@
   command: swapoff -a
   when: ansible_swaptotal_mb > 0
 
+- name: Remove swapfile from /etc/fstab
+  mount:
+    name: "{{ item }}"
+    fstype: swap
+    state: absent
+  with_items:
+    - swap
+    - none
+
 - name: Configure containerd.conf modules
   template:
      src: etc/modules-load.d/containerd.conf

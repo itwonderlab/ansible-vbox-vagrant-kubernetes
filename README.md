@@ -20,6 +20,10 @@ See https://www.itwonderlab.com/en/ansible-kubernetes-vagrant-tutorial/
 
 ------------------
 
+## For Windows users
+It is possible to execute the provisioning by leveraging the WSL2 sharing functionalities of Windows. Take a look [here](https://gist.github.com/pr3l14t0r/8b350fc7052ccee30a456596fa017c33) for further requirements and explanation.
+Uncomment the Windows related lines in the Vagrantfile in order to inject a ssh key from your WSL2 distribution into the VMs.
+
 ## Creación de un Clúster de Kubernetes 1.22 Containerd e Istio usando Vagrant y Ansible (1 maestro N nodos)
 
 Creación de un **clúster Kubernetes con múltiples nodos usando Vagrant, Ansible y Virtualbox**. Especialmente indicado para entornos de desarrollo local realistas.

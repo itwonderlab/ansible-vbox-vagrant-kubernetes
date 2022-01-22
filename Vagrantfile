@@ -12,8 +12,26 @@ IP_BASE = "192.168.50."
 
 VAGRANT_DISABLE_VBOXSYMLINKCREATE=1
 
+# Windows WSL users should use an own ssh private key and inject its corresponding public-key into the VM.
+# uncomment the next line, providing a path to your ssh private key within the WSL2 distro
+#SECURE_SSH_PRIVATE_KEY = "~/.ssh/NewKey"
+
 Vagrant.configure("2") do |config|
     config.ssh.insert_key = false
+
+    # Insert own ssh key to the machines. 
+    # Taken from: https://stackoverflow.com/questions/30075461/how-do-i-add-my-own-public-key-to-vagrant-vm
+    # uncomment the next block
+    
+    #vagrant_home_path = ENV["VAGRANT_HOME"] ||= "~/.vagrant.d"
+    #config.ssh.private_key_path = ["#{vagrant_home_path}/insecure_private_key", "#{SECURE_SSH_PRIVATE_KEY}"]
+
+    #config.vm.provision "file", source: "#{SECURE_SSH_PRIVATE_KEY}.pub", destination: "/home/vagrant/.ssh/SecureKey.pub"
+    #config.vm.provision :shell, privileged: false do |shell_action|
+    #    shell_action.inline = <<-SHELL
+    #        cat /home/vagrant/.ssh/SecureKey.pub >> /home/vagrant/.ssh/authorized_keys
+    #    SHELL
+    #  end
 
     (1..MASTERS_NUM).each do |i|      
         config.vm.define "k8s-m-#{i}" do |master|

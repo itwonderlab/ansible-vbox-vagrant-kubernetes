@@ -23,6 +23,7 @@ Vagrant.configure("2") do |config|
             master.vm.provider "virtualbox" do |v|
                 v.memory = MASTERS_MEM
                 v.cpus = MASTERS_CPU
+                v.name = "k8s-m-#{i}"
             end            
             master.vm.provision "ansible" do |ansible|
                 ansible.playbook = "roles/k8s.yml"
@@ -47,6 +48,7 @@ Vagrant.configure("2") do |config|
             node.vm.provider "virtualbox" do |v|
                 v.memory = NODES_MEM
                 v.cpus = NODES_CPU
+                v.name = "k8s-n-#{j}"
                 #v.customize ["modifyvm", :id, "--cpuexecutioncap", "20"]
             end             
             node.vm.provision "ansible" do |ansible|

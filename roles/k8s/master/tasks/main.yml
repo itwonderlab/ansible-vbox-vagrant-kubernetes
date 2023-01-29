@@ -48,3 +48,9 @@
 - name: Copy join command for {{ k8s_cluster_name }} cluster to local file
   become: false
   local_action: copy content="{{ join_command.stdout_lines[0] }}" dest="./{{ k8s_cluster_name }}-join-command"
+
+- name: Copy kubectl to local
+  ansible.builtin.fetch:
+    src: /home/{{ k8s_master_admin_user }}/.kube/config
+    dest: ./kubeconfig
+    flat: yes
